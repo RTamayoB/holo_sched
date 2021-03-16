@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 
-class VtuberList extends StatelessWidget {
-
-  //Temporary Vtuber List
-  final List<String> _kHololiveBranchs = <String> [
-    'HOLO JP',
-    'HOLOSTARS',
-    'HOLO ID',
-    'HOLO EN',
-  ];
+class BranchList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -39,39 +31,7 @@ class VtuberList extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: _kHololiveBranchs.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 2.0, color: Colors.green),
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    color: Colors.lightGreen,
-                  ),
-                  child: ListTile(
-                    onTap: () {
-                      // TODO: Display talents from branch
-                      print('${_kHololiveBranchs[index]} pressed, displaying talents');
-                    },
-                    title: Text(
-                      '${_kHololiveBranchs[index]}',
-                      style: Theme.of(context).textTheme.headline3,
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.arrow_drop_down),
-                      onPressed: () {
-                        print('${_kHololiveBranchs[index]} dropdown');
-                      },
-                    ),
-                  ),
-                );
-              },
-            ),
-          )
+          VtuberList()
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -93,4 +53,103 @@ class VtuberList extends StatelessWidget {
       ),
     );
   }
+}
+
+class VtuberList extends StatefulWidget {
+
+  @override
+  _VtuberListState createState() => _VtuberListState();
+}
+
+class _VtuberListState extends State<VtuberList> {
+
+  //Temporary Vtuber List
+  // TODO: Change this list for a firebase or similiar implementation.
+  List<ListItem<String>> _kHololiveBranchs;
+
+
+
+  //Mockup data of vtubers for testing
+  final List<String> _kVutbers =  [
+    //Holo ID
+    "Ayunda Risu",
+    'Moona Hoshinova',
+    'Airani Iofifteen',
+    'Kureiji Ollie',
+    'Anya Melfissa',
+    'Pavolia Reine'
+  ];
+
+  void _showBranch(int index){
+    print("Value of visible ${_kHololiveBranchs[index].isVisible}");
+    if(_kHololiveBranchs[index].isVisible == true) {
+      _kHololiveBranchs[index].isVisible = false;
+    }else{
+      _kHololiveBranchs[index].isVisible = true;
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _kHololiveBranchs = [];
+    _kHololiveBranchs.add(ListItem<String>("HOLO JP"));
+    _kHololiveBranchs.add(ListItem<String>("HOLOSTARS"));
+    _kHololiveBranchs.add(ListItem<String>("HOLO ID"));
+    _kHololiveBranchs.add(ListItem<String>("HOLO EN"));
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Expanded(
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: _kHololiveBranchs.length,
+        itemBuilder: _vtuberListBuilder,
+      ),
+    );
+  }
+
+  Widget _vtuberListBuilder(BuildContext context, int index) {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+            border: Border.all(width: 2.0, color: Colors.green),
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            color: Colors.lightGreen,
+          ),
+          child: ListTile(
+            onTap: () {
+              // TODO: Display talents from branch
+              setState(() {
+                _showBranch(index);
+              });
+              print('${_kHololiveBranchs[index].data} pressed, displaying talents, visible is ${_kHololiveBranchs[index].isVisible}');
+            },
+            title: Text(
+              '${_kHololiveBranchs[index].data}',
+              style: Theme.of(context).textTheme.headline3,
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.arrow_drop_down,),
+            ),
+          ),
+        ),
+        _kHololiveBranchs[index].isVisible ? Container() : Text("Shit"),
+      ],
+    );
+  }
+
+}
+
+class ListItem<T> {
+  bool isVisible = false; //Selection property to highlight or not
+  T data; //Data of the user
+  ListItem(this.data); //Constructor to assign the data
 }
