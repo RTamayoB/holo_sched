@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'vtuber_details.dart';
 
 class BranchList extends StatelessWidget {
 
@@ -55,45 +56,35 @@ class BranchList extends StatelessWidget {
   }
 }
 
-class VtuberList extends StatefulWidget {
-  @override
-  _VtuberListState createState() => _VtuberListState();
-}
-
-class _VtuberListState extends State<VtuberList> {
+class VtuberList extends StatelessWidget {
   //Temporary Vtuber List
   // TODO: Change this list for a firebase or similiar implementation.
-  List<ListItem<String>> _kHololiveBranchs;
+  List<ListItem<String>> _kHololiveBranchs = [
+    ListItem('HOLO JP'),
+    ListItem('HOLOSTARS'),
+    ListItem('HOLO ID'),
+    ListItem('HOLO EN'),
+  ];
 
-  void _showBranch(int index) {
-    print("Value of visible ${_kHololiveBranchs[index].isVisible}");
-    if (_kHololiveBranchs[index].isVisible == true) {
-      _kHololiveBranchs[index].isVisible = false;
-    } else {
-      _kHololiveBranchs[index].isVisible = true;
-    }
-  }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _kHololiveBranchs = [];
-    _kHololiveBranchs.add(ListItem<String>("HOLO JP"));
-    _kHololiveBranchs.add(ListItem<String>("HOLOSTARS"));
-    _kHololiveBranchs.add(ListItem<String>("HOLO ID"));
-    _kHololiveBranchs.add(ListItem<String>("HOLO EN"));
-  }
+  //_kHololiveBranchs = [];
+  //_kHololiveBranchs.add(ListItem<String>("HOLO JP"));
+  //_kHololiveBranchs.add(ListItem<String>("HOLOSTARS"));
+  //_kHololiveBranchs.add(ListItem<String>("HOLO ID"));
+  //_kHololiveBranchs.add(ListItem<String>("HOLO EN"));
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: _kHololiveBranchs.length,
-        itemBuilder: _vtuberListBuilder,
+    return Column(
+      children: [Expanded(
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: _kHololiveBranchs.length,
+          itemBuilder: _vtuberListBuilder,
+        ),
       ),
+    ]
     );
   }
 
@@ -112,17 +103,10 @@ class _VtuberListState extends State<VtuberList> {
             child: ListTile(
               onTap: () {
                 // TODO: Display talents from branch
-                setState(() {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return VtuberNames(_kHololiveBranchs[index].data);
-                  }));
-
-                  //_showBranch(index);
-                });
-                print(
-                    '${_kHololiveBranchs[index]
-                        .data} pressed, displaying talents, visible is ${_kHololiveBranchs[index]
-                        .isVisible}');
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                  return VtuberNames(_kHololiveBranchs[index].data, context);
+                }));
+                print('${_kHololiveBranchs[index].data} pressed, displaying talents, visible is ${_kHololiveBranchs[index].isVisible}');
               },
               title: Text(
                 '${_kHololiveBranchs[index].data}',
@@ -139,10 +123,7 @@ class _VtuberListState extends State<VtuberList> {
             ),
           ),
         ),
-        Hero(
-          tag: _kHololiveBranchs[index].data+"list",
-          child: Column(),
-        )
+        Column()
       ],
     );
   }
@@ -156,14 +137,22 @@ class ListItem<T> {
 
 class VtuberNames extends StatelessWidget {
   String branchName;
+  BuildContext mainContext;
 
-  VtuberNames(String branch) {
+  VtuberNames(String branch, BuildContext context) {
     this.branchName = branch;
+    this.mainContext = context;
   }
 
   //Mockup data of vtubers for testing
   final List<String> _kVutbers = [
     //Holo ID
+    "Ayunda Risu",
+    'Moona Hoshinova',
+    'Airani Iofifteen',
+    'Kureiji Ollie',
+    'Anya Melfissa',
+    'Pavolia Reine',
     "Ayunda Risu",
     'Moona Hoshinova',
     'Airani Iofifteen',
@@ -207,26 +196,29 @@ class VtuberNames extends StatelessWidget {
             ),
           ),
         ),
-        Hero(
-          tag: branchName + "list",
-          child: Expanded(
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: _kVutbers.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 2.0, color: Colors.orange),
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      color: Colors.deepOrange,
-                    ),
-                    child: ListTile(
-                      title: Text(_kVutbers[index]),
-                    ),
-                  );
-                }),
-          ),
+        Expanded(
+          child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: _kVutbers.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 2.0, color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: ListTile(
+                    leading: Image.network('https://yt3.ggpht.com/ytc/AAUvwnhSSaF3Q-PyyTSis4EH6Cu8FZ32LNvkxI9Gl_rn=s88-c-k-c0x00ffffff-no-rj'),
+                    title: Text(_kVutbers[index]),
+                    trailing: IconButton(icon: Icon(Icons.star_border),),
+                    onTap: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(builder: (context) => VtuberDetails()),
+                      );
+                    },
+                  ),
+                );
+              }),
         ),
       ],
     );
