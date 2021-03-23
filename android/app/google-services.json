@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1084917352557",
+    "project_id": "holo-sched",
+    "storage_bucket": "holo-sched.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084917352557:android:0e72af57f083661a5e5764",
+        "android_client_info": {
+          "package_name": "com.baguingi.holo_sched"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084917352557-8gr29gq0l5camsdopcqi9uu8128sij0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi0Aey9GXKihmXl82IVNYAtBawzkddbR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084917352557-8gr29gq0l5camsdopcqi9uu8128sij0t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

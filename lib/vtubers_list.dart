@@ -1,234 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'vtuber_details.dart';
-import 'test_data.dart';
 
-class Data {
-  List<Branch> kHololiveBranches = [
-    Branch('holo_jp', 'HOLO JP'),
-    Branch('holo_stars', 'HOLOSTARS'),
-    Branch('holo_id', 'HOLO ID'),
-    Branch('holo_en', 'HOLO EN'),
-  ];
-
-  List<Talent> kHololiveTalents = [
-    // TODO: Add the rest of the mockup values (opt to already instantiate firebase)
-    //HOLO JP
-    Talent(
-        'sora',
-        'Tokino Sora',
-        'holo_jp'),
-    Talent(
-        'roboco',
-        'Roboco',
-        'holo_jp'),
-    Talent(
-        'miko',
-        'Sakura Miko',
-        'holo_jp'),
-    Talent(
-        'suisei',
-        'Hoshimachi Suisei',
-        'holo_jp'),
-    Talent(
-        'azki',
-        'AZKi',
-        'holo_jp'),
-    Talent(
-        'mel',
-        'Yozora Mel',
-        'holo_jp'),
-    Talent(
-        'fubuki',
-        'Shirakami Fubuki',
-        'holo_jp'),
-    Talent(
-        'matsuri',
-        'Natsuiro Matsuri',
-        'holo_jp'),
-    Talent(
-        'rosenthal',
-        'Aki Rosenthal',
-        'holo_jp'),
-    Talent(
-        'haato',
-        'Akai Haato',
-        'holo_jp'),
-    Talent(
-        'aqua',
-        'Minato Aqua',
-        'holo_jp'),
-    Talent(
-        'shion',
-        'Murasaki Shion',
-        'holo_jp'),
-    Talent(
-        'ayame',
-        'Nakiri Ayame',
-        'holo_jp'),
-    Talent(
-        'choco',
-        'Yuzuki Choco',
-        'holo_jp'),
-    Talent(
-        'subaru',
-        'Oozora Subaru',
-        'holo_jp'),
-    Talent(
-        'mio',
-        'Ookami Mio',
-        'holo_jp'),
-    Talent(
-        'okayu',
-        'Nekomata Okayu',
-        'holo_jp'),
-    Talent(
-        'korone',
-        'Inugami Korone',
-        'holo_jp'),
-    Talent(
-        'pekora',
-        'Usada Pekora',
-        'holo_jp'),
-    Talent(
-        'rushia',
-        'Uruha Rushia',
-        'holo_jp'),
-    Talent(
-        'flare',
-        'Shiranui Flare',
-        'holo_jp'),
-    Talent(
-        'noel',
-        'Shirogane Noel',
-        'holo_jp'),
-    Talent(
-        'marine',
-        'Houshou Marine',
-        'holo_jp'),
-    Talent(
-        'kanata',
-        'Amane Kanata',
-        'holo_jp'),
-    Talent(
-        'coco',
-        'Kiryu Coco',
-        'holo_jp'),
-    Talent(
-        'watame',
-        'Tsunomaki Watame',
-        'holo_jp'),
-    Talent(
-        'towa',
-        'Tokoyami Towa',
-        'holo_jp'),
-    Talent(
-        'luna',
-        'Hinemori Luna',
-        'holo_jp'),
-    Talent(
-        'lamy',
-        'Yukihana Lamy',
-        'holo_jp'),
-    Talent(
-        'nene',
-        'Momosuzu Nene',
-        'holo_jp'),
-    Talent(
-        'botan',
-        'Shishiro Botan',
-        'holo_jp'),
-    Talent(
-        'polka',
-        'Omaru Polka',
-        'holo_jp'),
-    //HOLOSTARS
-    Talent(
-        'miyabi',
-        'Hanasaki Miyabi',
-        'holo_stars'),
-    Talent(
-        'izuru',
-        'Kanade Izuru',
-        'holo_stars'),
-    Talent(
-        'arurandeisu',
-        'Arurandeisu',
-        'holo_stars'),
-    Talent(
-        'rikka',
-        'Rikka',
-        'holo_stars'),
-    Talent(
-        'leda',
-        'Astel Leda',
-        'holo_stars'),
-    Talent(
-        'temma',
-        'Kishido Temma',
-        'holo_stars'),
-    Talent(
-        'roberu',
-        'Yukoku Roberu',
-        'holo_stars'),
-    Talent(
-        'shien',
-        'Kageyama Shien',
-        'holo_stars'),
-    Talent(
-        'oga',
-        'Aragami Oga',
-        'holo_stars'),
-    //HOLO ID
-    Talent(
-        'risu',
-        'Ayunda Risu',
-        'holo_id'),
-    Talent(
-        'hoshinova',
-        'Moona Hoshinova',
-        'holo_id'),
-    Talent(
-        'iofifteen',
-        'Airani Iofifteen',
-        'holo_id'),
-    Talent(
-        'ollie',
-        'Kureiji Ollie',
-        'holo_id'),
-    Talent(
-        'melfissa',
-        'Anya Melfissa',
-        'holo_id'),
-    Talent(
-        'reine',
-        'Pavolia Reine',
-        'holo_id'),
-    //HOLO EN
-    Talent(
-        'calliope',
-        'Mori Calliope',
-        'holo_en'),
-    Talent(
-        'kiara',
-        'Takanashi Kiara',
-        'holo_en'),
-    Talent(
-        'inanis',
-        "Ninomae Ina'nis",
-        'holo_en'),
-    Talent(
-        'gura',
-        'Gawr Gura',
-        'holo_en'),
-    Talent(
-        'amelia',
-        'Amelia Watson',
-        'holo_en'),
-  ];
-}
+// TODO: Clean code
 
 class Search extends SearchDelegate {
-
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
@@ -246,7 +22,8 @@ class Search extends SearchDelegate {
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {
-        Navigator.pop(context);
+        close(context, null);
+        //Navigator.pop(context);
       },
     );
   }
@@ -255,93 +32,163 @@ class Search extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('talents').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return new Text('Loading...');
 
+          final results = snapshot.data.docs.where((DocumentSnapshot a) =>
+              a.data()['talent_name'].toString().toLowerCase().contains(query.toLowerCase()));
+
+          return ListView(
+            children: results
+                .map((data) => Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 2.0, color: Colors.grey),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: ListTile(
+                        leading: Image.asset('assets/talents/${data.id}.jpg'),
+                        title: Text(data.data()['talent_name']),
+                        trailing: IconButton(
+                          icon: Icon(Icons.star_border),
+                          onPressed: () {},
+                        ),
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                builder: (context) => VtuberDetails()),
+                          );
+                        },
+                      ),
+                    ))
+                .toList(),
+            /*results.map<Widget>((a) => Text(a.data()['talent_name'])).toList()*/
+          );
+
+          Widget buildTalents(BuildContext context, DocumentSnapshot document) {
+            return Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 2.0, color: Colors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: ListTile(
+                leading: Image.asset('assets/talents/${document.id}.jpg'),
+                title: Text(document['talent_name']),
+                trailing: IconButton(
+                  icon: Icon(Icons.star_border),
+                  onPressed: () {},
+                ),
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(builder: (context) => VtuberDetails()),
+                  );
+                },
+              ),
+            );
+          }
+        });
+    /*
+    Stream<QuerySnapshot> suggestionList;
+    //List<Talent> suggestionList = [];
+    query.isEmpty
+        ? suggestionList = recentList
+        : suggestionList.
+        : suggestionList.addAll(listExample.where(
+            (element) => element.mTalentName.toLowerCase().contains(query),
+          ));
+
+    return TalentBuilder();*/
+  }
+
+  final Stream<QuerySnapshot> listExample;
+
+  Search(this.listExample);
+
+  Stream<QuerySnapshot> recentList;
+
+  //List<Talent> recentList = [Talent('gura', 'Gawr Gura', 'holo_en')];
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('talents').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return new Text('Loading...');
+
+          final results = snapshot.data.docs.where((DocumentSnapshot a) =>
+              a.data()['talent_name'].toString().toLowerCase().contains(query.toLowerCase()));
+
+          return ListView(
+            children: results
+                .map((data) => Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 2.0, color: Colors.grey),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: ListTile(
+                        leading: Image.asset('assets/talents/${data.id}.jpg'),
+                        title: Text(data.data()['talent_name']),
+                        trailing: IconButton(
+                          icon: Icon(Icons.star_border),
+                          onPressed: () {},
+                        ),
+                        onTap: () {
+                          Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute(
+                                builder: (context) => VtuberDetails()),
+                          );
+                        },
+                      ),
+                    ))
+                .toList(),
+            /*results.map<Widget>((a) => Text(a.data()['talent_name'])).toList()*/
+          );
+
+          Widget buildTalents(BuildContext context, DocumentSnapshot document) {
+            return Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 2.0, color: Colors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: ListTile(
+                leading: Image.asset('assets/talents/${document.id}.jpg'),
+                title: Text(document['talent_name']),
+                trailing: IconButton(
+                  icon: Icon(Icons.star_border),
+                  onPressed: () {},
+                ),
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(builder: (context) => VtuberDetails()),
+                  );
+                },
+              ),
+            );
+          }
+        });
+
+    /*
     List<Talent> suggestionList = [];
     query.isEmpty
         ? suggestionList = recentList
         : suggestionList.addAll(listExample.where(
-          (element) => element.mTalentName.toLowerCase().contains(query),
-    ));
+            (element) => element.mTalentName.toLowerCase().contains(query),
+          ));
 
-    return ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 2.0, color: Colors.grey),
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          ),
-          child: ListTile(
-            leading: Image.asset('assets/talents/${suggestionList[index].mId}.jpg'),
-            title: Text(suggestionList[index].mTalentName),
-            trailing: IconButton(
-              icon: Icon(Icons.star_border),
-            ),
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(builder: (context) => VtuberDetails()),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  final List<Talent> listExample;
-  Search(this.listExample);
-
-  List<Talent> recentList = [Talent('gura', 'Gawr Gura', 'holo_en')];
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<Talent> suggestionList = [];
-    query.isEmpty
-      ? suggestionList = recentList
-      : suggestionList.addAll(listExample.where(
-        (element) => element.mTalentName.toLowerCase().contains(query),
-        ));
-
-    return ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 2.0, color: Colors.grey),
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          ),
-          child: ListTile(
-            leading: Image.asset('assets/talents/${suggestionList[index].mId}.jpg'),
-            title: Text(suggestionList[index].mTalentName),
-            trailing: IconButton(
-              icon: Icon(Icons.star_border),
-            ),
-            onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(builder: (context) => VtuberDetails()),
-              );
-            },
-          ),
-        );
-      },
-    );
+    return TalentBuilder();*/
   }
 }
 
-
-class BranchList extends StatefulWidget {
+class ListScreen extends StatefulWidget {
   @override
-  _BranchListState createState() => _BranchListState();
+  _ListScreenState createState() => _ListScreenState();
 }
 
-class _BranchListState extends State<BranchList> {
+class _ListScreenState extends State<ListScreen> {
   HeroController _heroController = HeroController();
 
-  void showSnack() {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Changed'),
-    ));
-  }
+  var d = FirebaseFirestore.instance.collection('talents').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -365,7 +212,7 @@ class _BranchListState extends State<BranchList> {
             padding: const EdgeInsets.all(4.0),
             child: TextField(
               onTap: () {
-                showSearch(context: context, delegate: Search(Data().kHololiveTalents));
+                showSearch(context: context, delegate: Search(d));
               },
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -378,7 +225,7 @@ class _BranchListState extends State<BranchList> {
               observers: [_heroController],
               onGenerateRoute: (RouteSettings settings) {
                 return MaterialPageRoute(
-                  builder: (_) => VtuberList(),
+                  builder: (_) => BranchList(),
                 );
               },
             ),
@@ -397,27 +244,35 @@ class _BranchListState extends State<BranchList> {
   }
 }
 
-class VtuberList extends StatelessWidget {
-
+class BranchList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       Expanded(
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: Data().kHololiveBranches.length,
-          itemBuilder: _vtuberListBuilder,
-        ),
+        child: StreamBuilder<QuerySnapshot>(
+            stream:
+                FirebaseFirestore.instance.collection('branches').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) return LinearProgressIndicator();
+              return ListView(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  children: snapshot.data.docs
+                      .map((data) => _branchListBuilder(context, data))
+                      .toList()
+                  //itemCount: snapshot.data.docs,
+                  //itemBuilder: (context, index) => _branchListBuilder(context, snapshot.data.documents[index]),
+                  );
+            }),
       ),
     ]);
   }
 
-  Widget _vtuberListBuilder(BuildContext context, int index) {
+  Widget _branchListBuilder(BuildContext context, DocumentSnapshot document) {
     return Column(
       children: [
         Hero(
-          tag: Data().kHololiveBranches[index].mId,
+          tag: document.id,
           child: Container(
             margin: EdgeInsets.all(4.0),
             decoration: BoxDecoration(
@@ -429,59 +284,46 @@ class VtuberList extends StatelessWidget {
               onTap: () {
                 // TODO: Display talents from branch
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return VtuberNames(Data().kHololiveBranches[index].mId,
-                      Data().kHololiveBranches[index].mBranchName, context);
+                  return VtuberList(
+                      document.id, document['branch_name'], context, document);
                 }));
-                print(
-                    '${Data().kHololiveBranches[index].mBranchName} pressed, displaying talents, visible is ${Data().kHololiveBranches[index].isVisible}');
+                print('${document['branch_name']} pressed, displaying talents');
               },
               title: Text(
-                '${Data().kHololiveBranches[index].mBranchName}',
+                document['branch_name'],
                 style: Theme.of(context).textTheme.headline5,
               ),
-              trailing: IconButton(
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                ),
+              trailing: Icon(
+                Icons.arrow_drop_down,
               ),
             ),
           ),
         ),
-        Column()
       ],
     );
   }
 }
 
-class VtuberNames extends StatelessWidget {
-  String branchName;
-  String realBranchName;
-  BuildContext mainContext;
+class VtuberList extends StatefulWidget {
+  final String branchName;
+  final String realBranchName;
+  final BuildContext mainContext;
+  final DocumentSnapshot document;
 
-  VtuberNames(String branch, String realName, BuildContext context) {
-    this.branchName = branch;
-    this.realBranchName = realName;
-    this.mainContext = context;
+  VtuberList(
+      this.branchName, this.realBranchName, this.mainContext, this.document);
 
-    _getTalents();
-  }
+  @override
+  _VtuberListState createState() => _VtuberListState();
+}
 
-  List<Talent> _kTalentsFromBranch = [];
-
-  void _getTalents() {
-    for (Talent talent in Data().kHololiveTalents) {
-      if (talent.mBranchId == branchName) {
-        _kTalentsFromBranch.add(talent);
-      }
-    }
-  }
-
+class _VtuberListState extends State<VtuberList> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Hero(
-          tag: branchName,
+          tag: widget.branchName,
           child: Container(
             margin: EdgeInsets.all(4.0),
             decoration: BoxDecoration(
@@ -493,50 +335,74 @@ class VtuberNames extends StatelessWidget {
               onTap: () {
                 // TODO: Display talents from branch
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return VtuberList();
+                  return BranchList();
                 }));
               },
               title: Text(
-                realBranchName,
+                widget.realBranchName,
                 style: Theme.of(context).textTheme.headline5,
               ),
-              trailing: IconButton(
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                ),
+              trailing: Icon(
+                Icons.arrow_drop_down,
               ),
             ),
           ),
         ),
         Text('Tags go here'),
         Expanded(
-          child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: _kTalentsFromBranch.length,
-            itemBuilder: (context, index) {
-              return Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 2.0, color: Colors.grey),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                child: ListTile(
-                  leading: Image.asset('assets/talents/${_kTalentsFromBranch[index].mId}.jpg'),
-                  title: Text(_kTalentsFromBranch[index].mTalentName),
-                  trailing: IconButton(
-                    icon: Icon(Icons.star_border),
-                  ),
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(builder: (context) => VtuberDetails()),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
+          child: TalentBuilder(widget.branchName),
         ),
       ],
+    );
+  }
+}
+
+class TalentBuilder extends StatelessWidget {
+  final String branchName;
+
+  TalentBuilder(this.branchName);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('talents')
+            .where("branch_id", isEqualTo: branchName)
+            .orderBy("gen_id")
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return LinearProgressIndicator();
+          return ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              children: snapshot.data.docs
+                  .map((data) => _buildTalents(context, data))
+                  .toList()
+              //itemCount: snapshot.data.docs,
+              //itemBuilder: (context, index) => _branchListBuilder(context, snapshot.data.documents[index]),
+              );
+        });
+  }
+
+  Widget _buildTalents(BuildContext context, DocumentSnapshot document) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(width: 2.0, color: Colors.grey),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      child: ListTile(
+        leading: Image.asset('assets/talents/${document.id}.jpg'),
+        title: Text(document['talent_name']),
+        trailing: IconButton(
+          icon: Icon(Icons.star_border),
+          onPressed: () {},
+        ),
+        onTap: () {
+          Navigator.of(context, rootNavigator: true).push(
+            MaterialPageRoute(builder: (context) => VtuberDetails()),
+          );
+        },
+      ),
     );
   }
 }
