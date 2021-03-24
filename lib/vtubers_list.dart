@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'vtuber_details.dart';
 
-// TODO: Clean code
+
+// TODO: Clean code, look into creating a common widget for building talents list
+// TODO: Look how to add a sugestion list
 
 class Search extends SearchDelegate {
   @override
@@ -33,12 +35,18 @@ class Search extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('talents').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('talents')
+            .orderBy("pos")
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return new Text('Loading...');
 
-          final results = snapshot.data.docs.where((DocumentSnapshot a) =>
-              a.data()['talent_name'].toString().toLowerCase().contains(query.toLowerCase()));
+          final results = snapshot.data.docs.where((DocumentSnapshot a) => a
+              .data()['talent_name']
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase()));
 
           return ListView(
             children: results
@@ -63,30 +71,7 @@ class Search extends SearchDelegate {
                       ),
                     ))
                 .toList(),
-            /*results.map<Widget>((a) => Text(a.data()['talent_name'])).toList()*/
           );
-
-          Widget buildTalents(BuildContext context, DocumentSnapshot document) {
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 2.0, color: Colors.grey),
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
-              child: ListTile(
-                leading: Image.asset('assets/talents/${document.id}.jpg'),
-                title: Text(document['talent_name']),
-                trailing: IconButton(
-                  icon: Icon(Icons.star_border),
-                  onPressed: () {},
-                ),
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (context) => VtuberDetails()),
-                  );
-                },
-              ),
-            );
-          }
         });
     /*
     Stream<QuerySnapshot> suggestionList;
@@ -101,9 +86,7 @@ class Search extends SearchDelegate {
     return TalentBuilder();*/
   }
 
-  final Stream<QuerySnapshot> listExample;
-
-  Search(this.listExample);
+  Search();
 
   Stream<QuerySnapshot> recentList;
 
@@ -112,12 +95,18 @@ class Search extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('talents').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('talents')
+            .orderBy("pos")
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return new Text('Loading...');
 
-          final results = snapshot.data.docs.where((DocumentSnapshot a) =>
-              a.data()['talent_name'].toString().toLowerCase().contains(query.toLowerCase()));
+          final results = snapshot.data.docs.where((DocumentSnapshot a) => a
+              .data()['talent_name']
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase()));
 
           return ListView(
             children: results
@@ -142,30 +131,7 @@ class Search extends SearchDelegate {
                       ),
                     ))
                 .toList(),
-            /*results.map<Widget>((a) => Text(a.data()['talent_name'])).toList()*/
           );
-
-          Widget buildTalents(BuildContext context, DocumentSnapshot document) {
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 2.0, color: Colors.grey),
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
-              child: ListTile(
-                leading: Image.asset('assets/talents/${document.id}.jpg'),
-                title: Text(document['talent_name']),
-                trailing: IconButton(
-                  icon: Icon(Icons.star_border),
-                  onPressed: () {},
-                ),
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(builder: (context) => VtuberDetails()),
-                  );
-                },
-              ),
-            );
-          }
         });
 
     /*
@@ -180,15 +146,10 @@ class Search extends SearchDelegate {
   }
 }
 
-class ListScreen extends StatefulWidget {
-  @override
-  _ListScreenState createState() => _ListScreenState();
-}
 
-class _ListScreenState extends State<ListScreen> {
-  HeroController _heroController = HeroController();
 
-  var d = FirebaseFirestore.instance.collection('talents').snapshots();
+class ListScreen extends StatelessWidget {
+  final HeroController _heroController = HeroController();
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +173,7 @@ class _ListScreenState extends State<ListScreen> {
             padding: const EdgeInsets.all(4.0),
             child: TextField(
               onTap: () {
-                showSearch(context: context, delegate: Search(d));
+                showSearch(context: context, delegate: Search());
               },
               decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -250,19 +211,19 @@ class BranchList extends StatelessWidget {
     return Column(children: [
       Expanded(
         child: StreamBuilder<QuerySnapshot>(
-            stream:
-                FirebaseFirestore.instance.collection('branches').snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('branches')
+                .orderBy("pos")
+                .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return LinearProgressIndicator();
               return ListView(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  children: snapshot.data.docs
-                      .map((data) => _branchListBuilder(context, data))
-                      .toList()
-                  //itemCount: snapshot.data.docs,
-                  //itemBuilder: (context, index) => _branchListBuilder(context, snapshot.data.documents[index]),
-                  );
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: snapshot.data.docs
+                    .map((data) => _branchListBuilder(context, data))
+                    .toList(),
+              );
             }),
       ),
     ]);
@@ -276,21 +237,23 @@ class BranchList extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.all(4.0),
             decoration: BoxDecoration(
-              border: Border.all(width: 2.0, color: Colors.green),
+              border: Border.all(width: 2.0, color: Colors.grey),
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              color: Colors.lightGreen,
+              color: Colors.blue,
             ),
             child: ListTile(
               onTap: () {
                 // TODO: Display talents from branch
                 Navigator.push(context, MaterialPageRoute(builder: (_) {
                   return VtuberList(
-                      document.id, document['branch_name'], context, document);
+                      document.id.toString(),
+                      document['branch_name'].toString().toUpperCase(),
+                      context);
                 }));
                 print('${document['branch_name']} pressed, displaying talents');
               },
               title: Text(
-                document['branch_name'],
+                document['branch_name'].toString().toUpperCase(),
                 style: Theme.of(context).textTheme.headline5,
               ),
               trailing: Icon(
@@ -308,10 +271,8 @@ class VtuberList extends StatefulWidget {
   final String branchName;
   final String realBranchName;
   final BuildContext mainContext;
-  final DocumentSnapshot document;
 
-  VtuberList(
-      this.branchName, this.realBranchName, this.mainContext, this.document);
+  VtuberList(this.branchName, this.realBranchName, this.mainContext);
 
   @override
   _VtuberListState createState() => _VtuberListState();
@@ -327,9 +288,9 @@ class _VtuberListState extends State<VtuberList> {
           child: Container(
             margin: EdgeInsets.all(4.0),
             decoration: BoxDecoration(
-              border: Border.all(width: 2.0, color: Colors.green),
+              border: Border.all(width: 2.0, color: Colors.grey),
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              color: Colors.lightGreen,
+              color: Colors.blue,
             ),
             child: ListTile(
               onTap: () {
@@ -348,7 +309,33 @@ class _VtuberListState extends State<VtuberList> {
             ),
           ),
         ),
-        Text('Tags go here'),
+        // TODO: Add a builder for the horizontal list of FilterChips
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(4.0),
+            ),
+            FilterChip(
+              padding: EdgeInsets.all(4.0),
+              label: Text('all'),
+              selected: true,
+              onSelected: (bool value) {
+
+              },
+            ),
+            Container(
+              padding: EdgeInsets.all(4.0),
+            ),
+            FilterChip(
+              padding: EdgeInsets.all(4.0),
+              label: Text('gen 1'),
+              onSelected: (bool value) {
+
+              },
+            )
+          ],
+        ),
         Expanded(
           child: TalentBuilder(widget.branchName),
         ),
@@ -368,7 +355,7 @@ class TalentBuilder extends StatelessWidget {
         stream: FirebaseFirestore.instance
             .collection('talents')
             .where("branch_id", isEqualTo: branchName)
-            .orderBy("gen_id")
+            .orderBy("pos")
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return LinearProgressIndicator();
@@ -378,8 +365,6 @@ class TalentBuilder extends StatelessWidget {
               children: snapshot.data.docs
                   .map((data) => _buildTalents(context, data))
                   .toList()
-              //itemCount: snapshot.data.docs,
-              //itemBuilder: (context, index) => _branchListBuilder(context, snapshot.data.documents[index]),
               );
         });
   }
