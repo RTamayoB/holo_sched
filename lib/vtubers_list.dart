@@ -1,152 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'vtuber_details.dart';
 
-
-// TODO: Clean code, look into creating a common widget for building talents list
 // TODO: Look how to add a sugestion list
-
-class Search extends SearchDelegate {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-      IconButton(
-        icon: Icon(Icons.close),
-        onPressed: () {
-          query = "";
-        },
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-        //Navigator.pop(context);
-      },
-    );
-  }
-
-  String selectedResult;
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('talents')
-            .orderBy("pos")
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return new Text('Loading...');
-
-          final results = snapshot.data.docs.where((DocumentSnapshot a) => a
-              .data()['talent_name']
-              .toString()
-              .toLowerCase()
-              .contains(query.toLowerCase()));
-
-          return ListView(
-            children: results
-                .map((data) => Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 2.0, color: Colors.grey),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: ListTile(
-                        leading: Image.asset('assets/talents/${data.id}.jpg'),
-                        title: Text(data.data()['talent_name']),
-                        trailing: IconButton(
-                          icon: Icon(Icons.star_border),
-                          onPressed: () {},
-                        ),
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(
-                            MaterialPageRoute(
-                                builder: (context) => VtuberDetails()),
-                          );
-                        },
-                      ),
-                    ))
-                .toList(),
-          );
-        });
-    /*
-    Stream<QuerySnapshot> suggestionList;
-    //List<Talent> suggestionList = [];
-    query.isEmpty
-        ? suggestionList = recentList
-        : suggestionList.
-        : suggestionList.addAll(listExample.where(
-            (element) => element.mTalentName.toLowerCase().contains(query),
-          ));
-
-    return TalentBuilder();*/
-  }
-
-  Search();
-
-  Stream<QuerySnapshot> recentList;
-
-  //List<Talent> recentList = [Talent('gura', 'Gawr Gura', 'holo_en')];
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('talents')
-            .orderBy("pos")
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return new Text('Loading...');
-
-          final results = snapshot.data.docs.where((DocumentSnapshot a) => a
-              .data()['talent_name']
-              .toString()
-              .toLowerCase()
-              .contains(query.toLowerCase()));
-
-          return ListView(
-            children: results
-                .map((data) => Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 2.0, color: Colors.grey),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: ListTile(
-                        leading: Image.asset('assets/talents/${data.id}.jpg'),
-                        title: Text(data.data()['talent_name']),
-                        trailing: IconButton(
-                          icon: Icon(Icons.star_border),
-                          onPressed: () {},
-                        ),
-                        onTap: () {
-                          Navigator.of(context, rootNavigator: true).push(
-                            MaterialPageRoute(
-                                builder: (context) => VtuberDetails()),
-                          );
-                        },
-                      ),
-                    ))
-                .toList(),
-          );
-        });
-
-    /*
-    List<Talent> suggestionList = [];
-    query.isEmpty
-        ? suggestionList = recentList
-        : suggestionList.addAll(listExample.where(
-            (element) => element.mTalentName.toLowerCase().contains(query),
-          ));
-
-    return TalentBuilder();*/
-  }
-}
-
-
 
 class ListScreen extends StatelessWidget {
   final HeroController _heroController = HeroController();
@@ -203,6 +58,119 @@ class ListScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class Search extends SearchDelegate {
+  Search();
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return <Widget>[
+      IconButton(
+        icon: Icon(Icons.close),
+        onPressed: () {
+          query = "";
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+        //Navigator.pop(context);
+      },
+    );
+  }
+
+  String selectedResult;
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return _searchList(query);
+    /*
+    Stream<QuerySnapshot> suggestionList;
+    //List<Talent> suggestionList = [];
+    query.isEmpty
+        ? suggestionList = recentList
+        : suggestionList.
+        : suggestionList.addAll(listExample.where(
+            (element) => element.mTalentName.toLowerCase().contains(query),
+          ));
+
+    return TalentBuilder();*/
+  }
+
+  Stream<QuerySnapshot> recentList;
+
+  //List<Talent> recentList = [Talent('gura', 'Gawr Gura', 'holo_en')];
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return _searchList(query);
+
+    /*
+    List<Talent> suggestionList = [];
+    query.isEmpty
+        ? suggestionList = recentList
+        : suggestionList.addAll(listExample.where(
+            (element) => element.mTalentName.toLowerCase().contains(query),
+          ));
+
+    return TalentBuilder();*/
+  }
+
+  Widget _searchList(String query) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('talents')
+            .orderBy("pos")
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return new Text('Loading...');
+
+          final results = snapshot.data.docs.where((DocumentSnapshot a) => a
+              .data()['talent_name']
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase()));
+          // TODO: Check problem to change to Listview.builder
+          return ListView(
+              children:
+              results.map((data) => _talentBuilder(context, data)).toList());
+        });
+  }
+
+  Widget _talentBuilder(BuildContext context, DocumentSnapshot document) {
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(width: 2.0, color: Colors.grey),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      child: ListTile(
+        leading: Image.asset('assets/talents/${document.id}.jpg'),
+        title: Text(document['talent_name']),
+        trailing: IconButton(
+          icon: Icon(Icons.star_border),
+          onPressed: () {
+
+          },
+        ),
+        onTap: () {
+          // TODO: IMPORTANT - Uncomment when merging to vtuber_details.dart
+          /*
+          Navigator.of(context, rootNavigator: true).push(
+            MaterialPageRoute(builder: (context) => VtuberDetails()),
+          );*/
+        },
+      ),
+    );
+  }
+
 }
 
 class BranchList extends StatelessWidget {
@@ -279,6 +247,7 @@ class VtuberList extends StatefulWidget {
 }
 
 class _VtuberListState extends State<VtuberList> {
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -320,9 +289,7 @@ class _VtuberListState extends State<VtuberList> {
               padding: EdgeInsets.all(4.0),
               label: Text('all'),
               selected: true,
-              onSelected: (bool value) {
-
-              },
+              onSelected: (bool value) {},
             ),
             Container(
               padding: EdgeInsets.all(4.0),
@@ -330,46 +297,39 @@ class _VtuberListState extends State<VtuberList> {
             FilterChip(
               padding: EdgeInsets.all(4.0),
               label: Text('gen 1'),
-              onSelected: (bool value) {
-
-              },
+              onSelected: (bool value) {},
             )
           ],
         ),
         Expanded(
-          child: TalentBuilder(widget.branchName),
+          child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('talents')
+                  .where("branch_id", isEqualTo: widget.branchName)
+                  .orderBy("pos")
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return LinearProgressIndicator();
+                return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (context, index) =>
+                      _talentBuilder(snapshot.data.docs[index])
+                );
+                /*return ListView(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    children: snapshot.data.docs
+                        .map((data) => _talentBuilder(context, data))
+                        .toList());*/
+              }),
         ),
       ],
     );
   }
-}
 
-class TalentBuilder extends StatelessWidget {
-  final String branchName;
-
-  TalentBuilder(this.branchName);
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('talents')
-            .where("branch_id", isEqualTo: branchName)
-            .orderBy("pos")
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) return LinearProgressIndicator();
-          return ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              children: snapshot.data.docs
-                  .map((data) => _buildTalents(context, data))
-                  .toList()
-              );
-        });
-  }
-
-  Widget _buildTalents(BuildContext context, DocumentSnapshot document) {
+  Widget _talentBuilder(DocumentSnapshot document) {
+    bool isPressed = false;
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: 2.0, color: Colors.grey),
@@ -379,13 +339,28 @@ class TalentBuilder extends StatelessWidget {
         leading: Image.asset('assets/talents/${document.id}.jpg'),
         title: Text(document['talent_name']),
         trailing: IconButton(
-          icon: Icon(Icons.star_border),
-          onPressed: () {},
+          icon: Icon(!isPressed ? Icons.star_border : Icons.star),
+          color: !isPressed ? Colors.grey : Colors.yellow,
+          onPressed: () {
+            // TODO: Add individual press Logic
+/*
+            setState(() {
+              if(isPressed){
+                isPressed = false;
+              }
+              else{
+                isPressed = true;
+              }
+            });
+*/
+          },
         ),
         onTap: () {
+          // TODO: IMPORTANT - Uncomment when merging to vtuber_details.dart
+          /*
           Navigator.of(context, rootNavigator: true).push(
             MaterialPageRoute(builder: (context) => VtuberDetails()),
-          );
+          );*/
         },
       ),
     );
