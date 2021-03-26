@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:holo_sched/details_screen.dart';
 
 // TODO: Look how to add a sugestion list
 
@@ -161,11 +162,10 @@ class Search extends SearchDelegate {
           },
         ),
         onTap: () {
-          // TODO: IMPORTANT - Uncomment when merging to vtuber_details.dart
-          /*
+
           Navigator.of(context, rootNavigator: true).push(
-            MaterialPageRoute(builder: (context) => VtuberDetails()),
-          );*/
+            MaterialPageRoute(builder: (context) => DetailsScreen()),
+          );
         },
       ),
     );
@@ -356,11 +356,9 @@ class _VtuberListState extends State<VtuberList> {
           },
         ),
         onTap: () {
-          // TODO: IMPORTANT - Uncomment when merging to vtuber_details.dart
-          /*
           Navigator.of(context, rootNavigator: true).push(
-            MaterialPageRoute(builder: (context) => VtuberDetails()),
-          );*/
+            MaterialPageRoute(builder: (context) => DetailsScreen()),
+          );
         },
       ),
     );

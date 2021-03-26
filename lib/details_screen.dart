@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ListScreen extends StatelessWidget {
+class DetailsScreen extends StatelessWidget {
   final HeroController _heroController = HeroController();
 
   @override
@@ -20,6 +20,25 @@ class ListScreen extends StatelessWidget {
         ],
       ),
       // TODO: Add body with detail page
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(50.0),
+            child: Image.asset('assets/talents/gura.jpg'),
+          ),
+          Text(
+            'Gawr Gura',
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          IconButton(
+              icon: Icon(Icons.star_border),
+              onPressed: () {
+
+          }
+          )
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.star), label: ''),
