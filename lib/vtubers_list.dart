@@ -140,13 +140,13 @@ class Search extends SearchDelegate {
               .contains(query.toLowerCase()));
           // TODO: Check problem to change to Listview.builder
           return ListView(
-              children:
-              results.map((data) => _talentBuilder(context, data)).toList());
+              children: results
+                  .map((data) => _talentBuilder(context, data))
+                  .toList());
         });
   }
 
   Widget _talentBuilder(BuildContext context, DocumentSnapshot document) {
-
     return Container(
       decoration: BoxDecoration(
         border: Border.all(width: 2.0, color: Colors.grey),
@@ -157,20 +157,16 @@ class Search extends SearchDelegate {
         title: Text(document['talent_name']),
         trailing: IconButton(
           icon: Icon(Icons.star_border),
-          onPressed: () {
-
-          },
+          onPressed: () {},
         ),
         onTap: () {
-
           Navigator.of(context, rootNavigator: true).push(
-            MaterialPageRoute(builder: (context) => DetailsScreen()),
+            MaterialPageRoute(builder: (context) => DetailsScreen(document.id)),
           );
         },
       ),
     );
   }
-
 }
 
 class BranchList extends StatelessWidget {
@@ -247,7 +243,6 @@ class VtuberList extends StatefulWidget {
 }
 
 class _VtuberListState extends State<VtuberList> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -314,8 +309,7 @@ class _VtuberListState extends State<VtuberList> {
                     scrollDirection: Axis.vertical,
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) =>
-                      _talentBuilder(snapshot.data.docs[index])
-                );
+                        _talentBuilder(snapshot.data.docs[index]));
                 /*return ListView(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -336,7 +330,10 @@ class _VtuberListState extends State<VtuberList> {
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
       child: ListTile(
-        leading: Image.asset('assets/talents/${document.id}.jpg'),
+        leading: Hero(
+          tag: document.id,
+          child: Image.asset('assets/talents/${document.id}.jpg'),
+        ),
         title: Text(document['talent_name']),
         trailing: IconButton(
           icon: Icon(!isPressed ? Icons.star_border : Icons.star),
@@ -357,7 +354,7 @@ class _VtuberListState extends State<VtuberList> {
         ),
         onTap: () {
           Navigator.of(context, rootNavigator: true).push(
-            MaterialPageRoute(builder: (context) => DetailsScreen()),
+            MaterialPageRoute(builder: (context) => DetailsScreen(document.id)),
           );
         },
       ),

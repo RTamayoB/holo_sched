@@ -23,6 +23,7 @@ environment:
 dependencies:
 
   cloud_firestore: ^1.0.1
+  youtube_api: ^0.8.0
 
   flutter:
     sdk: flutter
