@@ -139,14 +139,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 //Tab Column
                 // TODO: Add tab navigation to see archive and live videos
-                Column(
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: ytResult.length,
-                      itemBuilder: (_, int index) => listItem(index),
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: ytResult.length,
+                        itemBuilder: (_, int index) => listItem(index),
+                      ),
+                    ],
+                  ),
                 ),
               ]);
             }
