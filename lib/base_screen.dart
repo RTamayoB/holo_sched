@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:holo_sched/favorites_screen.dart';
+import 'package:holo_sched/vtubers_list.dart';
 
 class BaseScreen extends StatefulWidget {
   @override
@@ -75,10 +77,8 @@ class _BaseScreenState extends State<BaseScreen> with SingleTickerProviderStateM
       body: TabBarView(
         controller: _tabController,
         children: [
-          for(final tab in tabs)
-            Center(
-              child: Text(tab),
-            )
+          BranchList(),
+          Favorites(),
         ],
       ),
       //Enable bottom navigation instead of tabbed view when more than 2 tabs
