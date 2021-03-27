@@ -151,14 +151,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
             return Container();
           }),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.star), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
-        ],
-        currentIndex: 1,
-      ),
     );
   }
 

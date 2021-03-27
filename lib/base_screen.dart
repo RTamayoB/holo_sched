@@ -77,7 +77,7 @@ class _BaseScreenState extends State<BaseScreen> with SingleTickerProviderStateM
       body: TabBarView(
         controller: _tabController,
         children: [
-          BranchList(),
+          ListScreen(),
           Favorites(),
         ],
       ),
