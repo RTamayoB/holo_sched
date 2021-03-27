@@ -9,54 +9,31 @@ class ListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('HoloSched'),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          tooltip: 'Menu Icon',
-          onPressed: () {
-            print('Icon Menu pressed');
-          },
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(4.0),
+          child: TextField(
+            onTap: () {
+              showSearch(context: context, delegate: Search());
+            },
+            decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.search),
+                hintText: 'Talent Name'),
+          ),
         ),
-        actions: [
-          CircleAvatar(),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(4.0),
-            child: TextField(
-              onTap: () {
-                showSearch(context: context, delegate: Search());
-              },
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Talent Name'),
-            ),
+        Expanded(
+          child: Navigator(
+            observers: [_heroController],
+            onGenerateRoute: (RouteSettings settings) {
+              return MaterialPageRoute(
+                builder: (_) => BranchList(),
+              );
+            },
           ),
-          Expanded(
-            child: Navigator(
-              observers: [_heroController],
-              onGenerateRoute: (RouteSettings settings) {
-                return MaterialPageRoute(
-                  builder: (_) => BranchList(),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.star), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: ''),
-        ],
-        currentIndex: 1,
-      ),
+        ),
+      ],
     );
   }
 }
