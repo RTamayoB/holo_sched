@@ -189,6 +189,7 @@ class BranchList extends StatelessWidget {
                   return VtuberList(
                       document.id.toString(),
                       document['branch_name'].toString().toUpperCase(),
+                      document['gens'],
                       context);
                 }));
                 print('${document['branch_name']} pressed, displaying talents');
@@ -211,18 +212,32 @@ class BranchList extends StatelessWidget {
 class VtuberList extends StatefulWidget {
   final String branchName;
   final String realBranchName;
+  List<dynamic> gens = [];
   final BuildContext mainContext;
 
-  VtuberList(this.branchName, this.realBranchName, this.mainContext);
+  VtuberList(this.branchName, this.realBranchName, this.gens, this.mainContext);
 
   @override
   _VtuberListState createState() => _VtuberListState();
 }
 
 class _VtuberListState extends State<VtuberList> {
+  int _value = 0;
+  String _selectedGen = "all";
+  List<Widget> choiceChips = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    if(widget.gens.length > 1){
+      widget.gens.insert(0, 'all');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Hero(
           tag: widget.branchName,
@@ -250,36 +265,48 @@ class _VtuberListState extends State<VtuberList> {
             ),
           ),
         ),
-        // TODO: Add a builder for the horizontal list of FilterChips
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(4.0),
-            ),
-            FilterChip(
-              padding: EdgeInsets.all(4.0),
-              label: Text('all'),
-              selected: true,
-              onSelected: (bool value) {},
-            ),
-            Container(
-              padding: EdgeInsets.all(4.0),
-            ),
-            FilterChip(
-              padding: EdgeInsets.all(4.0),
-              label: Text('gen 1'),
-              onSelected: (bool value) {},
-            )
-          ],
+        Expanded(
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            children: List<Widget>.generate(
+              widget.gens.length,
+              (int index) {
+                return Padding(
+                  padding: EdgeInsets.only(left: 4.0,right: 4.0),
+                  child: ChoiceChip(
+                    padding: const EdgeInsets.all(4.0),
+                    label: Text(
+                        "${widget.gens[index].toString()[0].toUpperCase()}${widget.gens[index].toString().substring(1)}"),
+                    selected: _value == index,
+                    onSelected: (bool selected) {
+                      setState(() {
+                        _value = index;
+                        print("Value " + _value.toString());
+                        _selectedGen = widget.gens[index];
+                      });
+                    },
+                  ),
+                );
+              },
+            ).toList(),
+          ),
         ),
         Expanded(
+          flex: 8,
           child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('talents')
-                  .where("branch_id", isEqualTo: widget.branchName)
-                  .orderBy("pos")
-                  .snapshots(),
+              stream: _selectedGen == 'all'
+                  ? FirebaseFirestore.instance
+                      .collection('talents')
+                      .where("branch_id", isEqualTo: widget.branchName)
+                      .orderBy("pos")
+                      .snapshots()
+                  : FirebaseFirestore.instance
+                      .collection('talents')
+                      .where("branch_id", isEqualTo: widget.branchName)
+                      .where("gen_id", isEqualTo: _selectedGen)
+                      .orderBy("pos")
+                      .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return LinearProgressIndicator();
                 return ListView.builder(
