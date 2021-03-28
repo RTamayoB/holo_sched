@@ -108,7 +108,9 @@ class Search extends SearchDelegate {
             .orderBy("pos")
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) return new Text('Loading...');
+          if (!snapshot.hasData) return new Center(
+            child: CircularProgressIndicator(),
+          );
 
           final results = snapshot.data.docs.where((DocumentSnapshot a) => a
               .data()['talent_name']
@@ -157,7 +159,7 @@ class BranchList extends StatelessWidget {
                 .orderBy("pos")
                 .snapshots(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) return LinearProgressIndicator();
+              if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
               return ListView(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
@@ -308,7 +310,7 @@ class _VtuberListState extends State<VtuberList> {
                       .orderBy("pos")
                       .snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return LinearProgressIndicator();
+                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
                 return ListView.builder(
                     scrollDirection: Axis.vertical,
                     itemCount: snapshot.data.docs.length,
