@@ -11,7 +11,7 @@ class DetailsScreen extends StatefulWidget {
     instance = FirebaseFirestore.instance.collection("talents");
   }
 
-  static String apikey = "AIzaSyCdoqepempradsan8bKPxKdyM7MpFhjE18";
+  static String apikey = "";
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
