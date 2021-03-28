@@ -11,7 +11,7 @@ class DetailsScreen extends StatefulWidget {
     instance = FirebaseFirestore.instance.collection("talents");
   }
 
-  static String apikey = "AIzaSyAAGYafmHBIAUCj70UtnehUDzCFGJH02WE";
+  static String apikey = "AIzaSyCdoqepempradsan8bKPxKdyM7MpFhjE18";
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -25,8 +25,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
   List<YT_API> ytResult = [];
 
   callAPI() async {
-    String query = "Memes de Amogus";
-    ytResult = await ytAPI.channel("UCoSrY_IQQVpmIRZ9Xf-y93g");
+    DocumentSnapshot rawChannelId = await widget.instance.doc(widget.documentId).get();
+    print("Raw Channel Id "+rawChannelId.data()['youtube']);
+    String channelId = rawChannelId.data()['youtube'].toString().substring(rawChannelId.data()['youtube'].toString().lastIndexOf('channel/')+8);
+    print("Channel Id "+channelId);
+    ytResult = await ytAPI.channel(channelId);
     ytResult = await ytAPI.nextPage();
     setState(() {});
   }
@@ -146,8 +149,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           width: 10,
                         ),
                         Expanded(
-                          child: Text(
-                              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
+                          child: Text(data['description'].toString().replaceAll('\\n', '\n')),
                         ),
                         Column(
                           children: [
