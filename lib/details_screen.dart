@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -39,6 +40,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    _launchURL(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        print('Could not launch $url');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('HoloSched'),
@@ -92,9 +102,31 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                         Expanded(
                           flex: 2,
-                          child: Text(
-                            data['talent_name'],
-                            style: Theme.of(context).textTheme.headline5,
+                          child: ListTile(
+                            title: Text(data['talent_name'], style: Theme.of(context).textTheme.headline6),
+                            subtitle: Wrap(
+                              children: [
+                                TextButton(
+                                    onPressed: () {
+                                      String url = data['twitter'];
+                                      _launchURL(url);
+                                    },
+                                    child: Text('Twitter')
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      String url = data['youtube'];
+                                      _launchURL(url);
+                                    },
+                                    child: Text('Youtube')
+                                )
+                              ],
+                            ),
+                            /*
+                            child: Text(
+                              data['talent_name'],
+                              style: Theme.of(context).textTheme.headline5,
+                            ),*/
                           ),
                         ),
                         Expanded(
@@ -122,13 +154,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             Row(
                               children: [
                                 Icon(Icons.not_started_outlined),
-                                Text('Youtube')
+                                TextButton(
+                                    onPressed: () {
+                                      String url = data['twitter'];
+                                      _launchURL(url);
+                                      },
+                                    child: Text('Twitter '))
                               ],
                             ),
                             Row(
                               children: [
                                 Icon(Icons.not_started_outlined),
-                                Text('Twitter')
+                                TextButton(
+                                    onPressed: () {
+                                      String url = data['youtube'];
+                                      _launchURL(url);
+                                    },
+                                    child: Text('Youtube'))
                               ],
                             ),
                           ],
